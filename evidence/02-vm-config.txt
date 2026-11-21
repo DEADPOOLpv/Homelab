@@ -1,0 +1,9 @@
+# Transcribed from `qm list` and `qm config 100`, 21 Nov 2026. MAC address, UUID and generation ID omitted.
+VMID 100  TrueNAS   memory 4096 MiB   boot disk 32.00 GiB
+VMID 101  ParrotOS  memory 8192 MiB   boot disk 80.00 GiB
+VM 100: balloon 0, cores 1, sockets 1, cpu host, memory 4096, onboot 1, numa 0
+        hostpci0: 00:14.0
+        scsi0: local:100/vm-100-disk-0.qcow2, 32G, iothread=1; scsihw virtio-scsi-single
+        ide2: TrueNAS installer ISO (cdrom, still attached); boot order scsi0;ide2;net0
+        net0: virtio on vmbr0, firewall=1
+        creation record (ctime): 24 November 2025

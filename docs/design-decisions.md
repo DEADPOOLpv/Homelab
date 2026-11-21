@@ -3,7 +3,7 @@
 Write each as: **Decision, alternatives considered, reason, trade-off.**
 
 1. Why Proxmox as the hypervisor. TODO
-2. Why a TrueNAS VM with USB disk passthrough, rather than ZFS directly on Proxmox. Reasons: it already runs, and its web interface suits several users and devices. Not claimed: PCIe/IOMMU passthrough, because the disk is USB. Trade-offs: costs host RAM; ZFS over USB can disconnect.
+2. Why a TrueNAS VM with the USB controller passed through (PCIe/IOMMU), rather than ZFS directly on Proxmox. Reasons: it already runs, and its web interface suits several users and devices. Trade-offs: the VM costs host RAM; the passed-through USB controller is unavailable to the host; ZFS over a USB link can disconnect.
 3. Why WireGuard rather than exposing ports at home. TODO
 4. Why Layer 4 rather than Layer 7 proxying at the edge. TODO
 5. Why administration is web interface only, with SSH disabled. TODO: reasons. Trade-off: no remote shell if the web interface breaks, so recovery is the laptop's own screen and keyboard.

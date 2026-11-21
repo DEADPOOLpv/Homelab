@@ -1,0 +1,5 @@
+# Transcribed from the TrueNAS Datasets page, 21 Nov 2026
+tank      2.2 GiB used / 897.05 GiB available   Unencrypted
+  cctv    96 KiB / 500 GiB (quota)              Unencrypted   SMB
+  private 192 KiB / 897.05 GiB                  Encrypted, Unlocked   SMB
+  shared  96 KiB / 897.05 GiB                   Unencrypted   SMB
