@@ -1,13 +1,16 @@
 # Threat model
 
+Scope: a home network with one laptop server, a few users and two cameras. Not a high-security environment; the controls are chosen to be proportionate and easy to maintain.
+
 | Asset | Threat | Control | Tested? |
 |---|---|---|---|
-| Home network | Direct exposure from the internet | Only the edge VPS is public; tunnel is the only path in | |
-| Proxmox web UI | Credential attack | LAN/tunnel only, 2FA | |
-| Stored files | Disk failure, accidental deletion | ZFS snapshots, backups | |
-| Stored files | Interception on the LAN | SMB3 encryption (negotiated; camera traffic may be unencrypted) | |
-| Personal documents | Another user or device reading them | Separate encrypted `private` dataset, one login only | |
-| Camera account | A compromised camera reaching other data | Camera login can open `cctv` only | |
-| Edge VPS | Port scanning, brute force | Firewall, key-only SSH | |
-
-Fill the last column with a real test or leave it blank.
+| Proxmox management interface | Credential attack from the internet or the LAN | Not published; firewall allows port 8006 only from the Tailscale range and the home network; two-factor login | Configured |
+| Proxmox host | Attack through a remote shell | SSH service disabled | Configured |
+| Proxmox host | Running unpatched software | Monthly update routine; dry-run check before upgrading | Update to 9.2.32 done |
+| Private documents | Another user or device reading them | Separate natively encrypted dataset; one login only | Denial test pending |
+| Shared folder | Over-broad access | Shared login can open `shared` only | Denial test pending |
+| Camera login | A compromised camera or its stored credentials reaching other data | Camera login can open `cctv` only; quota 500 GiB | Camera sessions seen connected |
+| Files on the LAN | Interception | SMB transport encryption | Set to negotiate; active for capable clients |
+| Files | Accidental deletion | Daily snapshots | Tasks enabled; first run pending |
+| Files | Disk failure or theft | None, by design | See `backup-strategy.md` |
+| NAS reached from outside the home | Exposure to the internet | Reached only through Tailscale; no router port forwarding; only the owner's devices on the tailnet | Tested from outside the home network |

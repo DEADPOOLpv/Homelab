@@ -1,12 +1,23 @@
 # Backup strategy
 
-## Current reality
-One 1 TB data disk and one SSD in a single machine. ZFS on a single disk gives checksums and snapshots, which protect against corruption detection and accidental deletion, but **not against disk failure or theft**. Snapshots are not backups.
+## Decision
+No separate backup is kept. This is deliberate.
 
-## Do not claim "3-2-1" unless all three hold
-- [ ] 3 copies of the data
-- [ ] 2 different media
-- [ ] 1 copy offsite
+## Reasoning (author's)
+- The NAS is a transfer point between devices and a place for convenience copies. The author keeps the originals of anything important on a PC, laptop or phone.
+- Rule in force: **the NAS never holds the only copy of anything.** Anything irreplaceable is also held on another device.
 
-## Plan
-TODO: choose a second disk or an offsite target, then record the result and a tested restore.
+## What protects the data, and what does not
+| Risk | Protected? | How |
+|---|---|---|
+| Accidental deletion or overwrite | Yes | Daily snapshots: `shared` for 2 weeks, `private` for 1 month |
+| Silent corruption | Detected | ZFS checksums and scheduled scrubs |
+| Disk failure | No | Single disk, no redundancy; data on the NAS would be lost |
+| Theft, fire, power surge | No | One machine, one location |
+| Camera footage | Partly | Each camera keeps its own SD card |
+
+## Not claimed
+This setup does not meet the 3-2-1 rule (three copies, two media, one off-site) and is not described as doing so.
+
+## When to revisit
+If anything irreplaceable is ever stored only on the NAS, add a second drive or an encrypted off-site copy first.

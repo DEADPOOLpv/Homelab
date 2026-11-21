@@ -1,50 +1,76 @@
-# Homelab: Proxmox, TrueNAS and a WireGuard-protected edge
+# Homelab: Proxmox, TrueNAS and ZFS on a single laptop
 
-A single-node home infrastructure lab that has been running for over a year: the TrueNAS VM's creation record in Proxmox is dated 24 November 2025. The host has not been reinstalled. In November 2026 it was decluttered and is being rebuilt to be more efficient, easier to use and more secure; this repository documents that work. Earlier configuration notes were lost, so the documentation is written from the live system.
+A single-node home infrastructure lab: a Proxmox VE hypervisor running a TrueNAS storage VM, with least-privilege file shares, scheduled snapshots, camera recording to the NAS, and private remote administration over Tailscale. Everything listed as built is running; everything else is marked as planned.
 
-> **Honesty rule for this repository:** a feature is marked **Built** only after it has been verified, with proof in `evidence/`. Everything else is **Planned** or **In progress**.
+**History:** in use since at least November 2025 (the TrueNAS VM's creation record in Proxmox is dated 24 November 2025); the author reports running Proxmox and TrueNAS for more than a year. The host has not been reinstalled. In November 2026 it was decluttered and rebuilt to be more efficient, easier to use and more secure, and this repository was started to document it. Earlier notes were lost, so everything here is written from the live system.
 
-## Hardware (verified)
+**How to read the status column:** *Built* means it is running and the author operates it. *Built, to be tested* means it is configured but a specific test has not been done yet. *Planned* means not built. No screenshots, logs or configuration dumps are published, because they can reveal the network layout; the author can demonstrate any item live.
+
+## Hardware
 
 | Item | Detail |
 |---|---|
-| Machine | Lenovo laptop (older model; exact model: TODO) |
-| CPU | Intel Core i5-1135G7 @ 2.40 GHz, 1 socket, 4 cores / 8 threads (Proxmox shows 8 logical CPUs) |
+| Machine | Lenovo laptop (older model) |
+| CPU | Intel Core i5-1135G7 @ 2.40 GHz, 4 cores / 8 threads |
 | RAM | 16 GB |
-| Boot/VM disk | 225 GB SSD (Proxmox host and VM storage) |
-| Bulk disk | 1 TB hard drive, connected over USB; the laptop's USB controller is passed through (PCIe/IOMMU) to a TrueNAS VM |
+| System disk | 225 GB SSD (Proxmox and VM disks) |
+| Bulk disk | 1 TB hard drive, connected over USB |
 | Hypervisor | Proxmox VE 9.2.32, kernel 7.0.14-30-pve |
-
-## Status
-
-| # | Component | Status | Evidence |
-|---|---|---|---|
-| 1 | Proxmox VE updated and hardened | Built (two evidence items pending) | `evidence/01-*` |
-| 2 | TrueNAS VM with the 1 TB USB disk (PCIe passthrough of the USB controller) | In progress | `evidence/02-*` |
-| 3 | Pool rebuilt as `tank`, three datasets (done); automated snapshots, ACLs (planned) | In progress | `evidence/02-datasets.txt` |
-| 4 | SMB shares with separate logins; cameras storing to `cctv` | In progress (reported working; evidence pending) | `docs/02-truenas-nas.md` |
-| 5 | Cloud edge VPS | Planned | |
-| 6 | WireGuard site-to-site tunnel | Planned | |
-| 7 | Layer 4 reverse proxy at the edge | Planned | |
-| 8 | Terraform and Ansible automation | Planned | |
-| 9 | Backups (see `docs/backup-strategy.md`) | Planned | |
 
 ## Architecture
 
-Diagram: TODO (added after step 6). Target design: the public internet reaches only the cloud edge VPS; the VPS forwards selected ports through an encrypted WireGuard tunnel to a service VM on Proxmox; the home network is never directly exposed.
+```
+  Owner PC / phone        Other devices          2 x Xiaomi cameras
+  (personal login)        (shared login)         (camera login; SD card + Mi Home app)
+         |                      |                          |
+         +----------------------+--------------------------+
+                                |   home network, SMB 3.1.1
+   +----------------------------v----------------------------------------+
+   |  Lenovo laptop: Intel i5-1135G7, 16 GB RAM                          |
+   |   Proxmox VE 9.2.32 (web interface only, firewall, Tailscale)       |
+   |    +-- VM 100  TrueNAS (4 GiB RAM, 2 cores, CPU type host)          |
+   |    |     USB controller 00:14.0 passed through (PCIe / IOMMU)       |
+   |    |     1 TB USB disk -> ZFS pool "tank"                           |
+   |    |       tank/shared   tank/private (encrypted)   tank/cctv       |
+   |    +-- VM 101  ParrotOS (currently stopped)                         |
+   +----------------------------^----------------------------------------+
+                                |
+              Tailscale: private administration of the web interface
+              (owner devices only, port 8006)
+```
 
-## Documentation
+## What is built
 
-- `docs/00-hardware.md`: what the machine can and cannot do
-- `docs/01` to `docs/05`: build logs, one per step
-- `docs/design-decisions.md`: why each choice was made
-- `docs/threat-model.md`: what is protected from what
-- `docs/backup-strategy.md`: what is and is not backed up
-- `evidence/`: sanitized screenshots and command output
+| # | Component | Status |
+|---|---|---|
+| 1 | Proxmox VE updated to 9.2.32 after fixing a repository fault (`docs/01-proxmox-hardening.md`) | Built |
+| 2 | Administration through the web interface only; SSH service disabled | Built |
+| 3 | Two-factor login on the Proxmox administrator account | Built |
+| 4 | Proxmox firewall: port 8006 allowed only from the Tailscale range and the home network | Built |
+| 5 | Tailscale on the host and the owner's devices | Built |
+| 6 | TrueNAS VM with the laptop's USB controller passed through (PCIe/IOMMU) | Built |
+| 7 | ZFS pool `tank` with three datasets, one natively encrypted, one with a 500 GiB quota | Built |
+| 8 | Daily snapshots: `shared` kept 2 weeks, `private` kept 1 month | Built, to be tested (first run pending) |
+| 9 | SMB shares with three least-privilege logins | Built, to be tested (access denial test pending) |
+| 10 | Two cameras recording to the NAS over SMB 3.1.1 | Built |
+| 11 | SMB transport encryption negotiated for capable clients | Built |
+| 12 | Remote access to the NAS over Tailscale, from outside the home network | Built |
+
+## Design in brief
+
+- **Three logins, three folders:** a personal login opens everything; a shared login opens only `shared`; a camera login opens only `cctv`. A compromised camera or a shared password never reaches the private dataset.
+- **Small attack surface:** no SSH, no public exposure of the management interface, two-factor login, firewall rule on the management port.
+- **Honest storage design:** a single disk, no redundancy. This is a deliberate decision, explained in `docs/backup-strategy.md`.
+
+Full reasoning: `docs/design-decisions.md`. Threats and controls: `docs/threat-model.md`. Routine upkeep: `docs/maintenance.md`.
+
+## Roadmap (not built)
+
+- An internet-facing edge (WireGuard tunnel and reverse proxy) and infrastructure as code, to be added only when built
 
 ## Security and privacy
 
-This repository contains no real IP addresses, keys, domain names, passwords or camera/home details. Run `scripts/sanitize-check.sh` before every commit.
+This repository contains no real IP addresses, keys, domain names, passwords, serial numbers or account names. Run `scripts/sanitize-check.sh` before every commit.
 
 ## Author
 
