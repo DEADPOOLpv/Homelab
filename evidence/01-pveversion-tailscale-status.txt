@@ -1,0 +1,7 @@
+# Transcribed from a terminal screenshot; addresses, device names and the account name masked.
+root@pve:~# pveversion
+pve-manager/9.2.18/<build-id> (running kernel: 7.0.14-16-pve)
+root@pve:~# tailscale status
+100.x.x.x   pve        <account>   linux    -
+100.x.x.x   phone      <account>   iOS      idle; offline
+100.x.x.x   pc         <account>   windows  active; direct <lan-address>

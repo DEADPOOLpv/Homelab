@@ -1,0 +1,8 @@
+# Transcribed from terminal output.
+apt update contacted only: pkgs.tailscale.com (stable, trixie) and download.proxmox.com (pve, trixie). No Debian mirror lines.
+/etc/apt/sources.list.d: deb.debian.org (trixie, trixie-updates) -> Enabled: false
+                         security.debian.org (trixie-security)  -> Enabled: false
+apt policy:  pve-manager  installed 9.2.18, candidate 9.2.32
+             libpve-rs-perl installed 0.15.3, candidate 0.16.3
+             pve-cluster  installed 9.1.6,  candidate 9.1.12
+74 packages upgradable
