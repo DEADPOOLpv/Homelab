@@ -1,6 +1,0 @@
-# Transcribed from TrueNAS dashboard screenshots, 21 Nov 2026 (no identifiers).
-TrueNAS Community 25.10 (point release 0.1) Goldeye, update available
-VM CPU: QEMU Virtual CPU version 2.5+; memory about 1.9 GiB total available
-Pool "cctv": 1 x DISK, 1 wide, 931.51 GiB; usable 899.25 GiB; used 2.25 GiB; available 897 GiB
-Storage health: online, no errors. Scrub: Sundays 00:00; last finished 2026-11-01 13:22, 0 errors, 52 min
-Auto TRIM: off

@@ -8,14 +8,14 @@ A single-node home infrastructure lab: a Proxmox VE hypervisor running a TrueNAS
 
 ## Hardware
 
-| Item | Detail |
-|---|---|
-| Machine | Lenovo laptop (older model) |
-| CPU | Intel Core i5-1135G7 @ 2.40 GHz, 4 cores / 8 threads |
-| RAM | 16 GB |
-| System disk | 225 GB SSD (Proxmox and VM disks) |
-| Bulk disk | 1 TB hard drive, connected over USB |
-| Hypervisor | Proxmox VE 9.2.32, kernel 7.0.14-30-pve |
+| Item        | Detail                                               |
+| ----------- | ---------------------------------------------------- |
+| Machine     | Lenovo laptop (older model)                          |
+| CPU         | Intel Core i5-1135G7 @ 2.40 GHz, 4 cores / 8 threads |
+| RAM         | 16 GB                                                |
+| System disk | 225 GB SSD (Proxmox and VM disks)                    |
+| Bulk disk   | 1 TB hard drive, connected over USB                  |
+| Hypervisor  | Proxmox VE 9.2.32, kernel 7.0.14-30-pve              |
 
 ## Architecture
 
@@ -41,20 +41,20 @@ A single-node home infrastructure lab: a Proxmox VE hypervisor running a TrueNAS
 
 ## What is built
 
-| # | Component | Status |
-|---|---|---|
-| 1 | Proxmox VE updated to 9.2.32 after fixing a repository fault (`docs/01-proxmox-hardening.md`) | Built |
-| 2 | Administration through the web interface only; SSH service disabled | Built |
-| 3 | Two-factor login on the Proxmox administrator account | Built |
-| 4 | Proxmox firewall: port 8006 allowed only from the Tailscale range and the home network | Built |
-| 5 | Tailscale on the host and the owner's devices | Built |
-| 6 | TrueNAS VM with the laptop's USB controller passed through (PCIe/IOMMU) | Built |
-| 7 | ZFS pool `tank` with three datasets, one natively encrypted, one with a 500 GiB quota | Built |
-| 8 | Daily snapshots: `shared` kept 2 weeks, `private` kept 1 month | Built, to be tested (first run pending) |
-| 9 | SMB shares with three least-privilege logins | Built, to be tested (access denial test pending) |
-| 10 | Two cameras recording to the NAS over SMB 3.1.1 | Built |
-| 11 | SMB transport encryption negotiated for capable clients | Built |
-| 12 | Remote access to the NAS over Tailscale, from outside the home network | Built |
+| #  | Component                                                                                       | Status                                  |
+| -- | ----------------------------------------------------------------------------------------------- | --------------------------------------- |
+| 1  | Proxmox VE updated to 9.2.32 after fixing a repository fault (`docs/01-proxmox-hardening.md`) | Built                                   |
+| 2  | Administration through the web interface only; SSH service disabled                             | Built                                   |
+| 3  | Two-factor login on the Proxmox administrator account                                           | Built                                   |
+| 4  | Proxmox firewall: port 8006 allowed only from the Tailscale range and the home network          | Built                                   |
+| 5  | Tailscale on the host and the owner's devices                                                   | Built                                   |
+| 6  | TrueNAS VM with the laptop's USB controller passed through (PCIe/IOMMU)                         | Built                                   |
+| 7  | ZFS pool `tank` with three datasets, one natively encrypted, one with a 500 GiB quota         | Built                                   |
+| 8  | Daily snapshots: `shared` kept 2 weeks, `private` kept 1 month                              | Built, to be tested (first run pending) |
+| 9  | SMB shares with three least-privilege logins                                                    | Built                                   |
+| 10 | Two cameras recording to the NAS over SMB 3.1.1                                                 | Built                                   |
+| 11 | SMB transport encryption negotiated for capable clients                                         | Built                                   |
+| 12 | Remote access to the NAS over Tailscale, from outside the home network                          | Built                                   |
 
 ## Design in brief
 
