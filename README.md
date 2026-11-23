@@ -50,7 +50,7 @@ A single-node home infrastructure lab: a Proxmox VE hypervisor running a TrueNAS
 | 5  | Tailscale on the host and the owner's devices                                                   | Built                                   |
 | 6  | TrueNAS VM with the laptop's USB controller passed through (PCIe/IOMMU)                         | Built                                   |
 | 7  | ZFS pool `tank` with three datasets, one natively encrypted, one with a 500 GiB quota         | Built                                   |
-| 8  | Daily snapshots: `shared` kept 2 weeks, `private` kept 1 month                              | Built, to be tested (first run pending) |
+| 8  | Daily snapshots: `shared` kept 2 weeks, `private` kept 1 month                              | Built                                       |
 | 9  | SMB shares with three least-privilege logins                                                    | Built                                   |
 | 10 | Two cameras recording to the NAS over SMB 3.1.1                                                 | Built                                   |
 | 11 | SMB transport encryption negotiated for capable clients                                         | Built                                   |
