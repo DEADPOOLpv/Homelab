@@ -2,9 +2,9 @@
 
 A single-node home infrastructure lab: a Proxmox VE hypervisor running a TrueNAS storage VM, with least-privilege file shares, scheduled snapshots, camera recording to the NAS, and private remote administration over Tailscale. Everything listed as built is running; everything else is marked as planned.
 
-**History:** in use since at least November 2025 (the TrueNAS VM's creation record in Proxmox is dated 24 November 2025); the author reports running Proxmox and TrueNAS for more than a year. The host has not been reinstalled. In November 2026 it was decluttered and rebuilt to be more efficient, easier to use and more secure, and this repository was started to document it. Earlier notes were lost, so everything here is written from the live system.
+**History:** in use since at least November 2025. In November 2026 it was decluttered and rebuilt to be more efficient, easier to use and more secure, and this repository was started to document it. Earlier notes were lost, so everything here is written from the live system.
 
-**How to read the status column:** *Built* means it is running and the author operates it. *Built, to be tested* means it is configured but a specific test has not been done yet. *Planned* means not built. No screenshots, logs or configuration dumps are published, because they can reveal the network layout; the author can demonstrate any item live.
+**How to read the status column:** *Built* means it is running and tested. *Built, to be tested* means it is configured but a specific test has not been done yet. *Planned* means not built.
 
 ## Hardware
 
@@ -67,10 +67,6 @@ Full reasoning: `docs/design-decisions.md`. Threats and controls: `docs/threat-m
 ## Roadmap (not built)
 
 - An internet-facing edge (WireGuard tunnel and reverse proxy) and infrastructure as code, to be added only when built
-
-## Security and privacy
-
-This repository contains no real IP addresses, keys, domain names, passwords, serial numbers or account names. Run `scripts/sanitize-check.sh` before every commit.
 
 ## Author
 
